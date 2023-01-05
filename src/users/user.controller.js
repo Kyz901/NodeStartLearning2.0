@@ -1,0 +1,57 @@
+const userService = require('./user.service');
+
+const getAllUsers = async (req, res, next) => {
+    try {
+        const users = await userService.getAllUsers(req.query);
+
+        res.json(users);
+    } catch (e) {
+        next(e);
+    }
+};
+
+const getUserById = (req, res, next) => {
+    try {
+        res.json(req.user);
+    } catch (e) {
+        next(e);
+    }
+};
+
+const createUser = async (req, res, next) => {
+    try {
+        const newUser = await userService.createUser(req.body);
+
+        res.status(201).json(newUser);
+    } catch (e) {
+        next(e);
+    }
+};
+
+const deleteUserById = async (req, res, next) => {
+    try {
+        await userService.deleteUserById(req.user._id);
+
+        res.json("success");
+    } catch (e) {
+        next(e);
+    }
+};
+
+const updateUserById = async (req, res, next) => {
+    try {
+        const updatedUser = await userService.updateUser(req.user, req.body);
+
+        res.json(updatedUser);
+    } catch (e) {
+        next(e);
+    }
+};
+
+module.exports = {
+    getAllUsers,
+    getUserById,
+    createUser,
+    deleteUserById,
+    updateUserById,
+};
