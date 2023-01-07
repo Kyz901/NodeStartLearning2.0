@@ -1,3 +1,5 @@
+const { SERVER_ERROR } = require("./errors/error.codes");
+
 const express = require('express');
 require('dotenv').config();
 const config = require('./configs/config');
@@ -9,6 +11,7 @@ mongoose.set('debug', true);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/', router);
+app.use(mainErrorHandler);
 
 app.listen(config.APP_PORT, async () => {
     try {
@@ -24,3 +27,11 @@ app.listen(config.APP_PORT, async () => {
     }
     console.log(`Listening on port: ${config.APP_PORT}`);
 });
+
+function mainErrorHandler(err, req, res, next) {
+    res
+        .status(err.status || SERVER_ERROR)
+        .json({
+            message: err.message || 'Unknown error'
+        });
+}

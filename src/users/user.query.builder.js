@@ -1,3 +1,5 @@
+const {ASC, DESC} = require("../../configs/constats");
+
 function buildFilterQuery(queryParams = {}) {
     const filterQuery = {};
     const ageFilter = {};
@@ -46,10 +48,10 @@ function buildFilterQuery(queryParams = {}) {
 }
 
 function buildSortQuery(sortBy, order) {
+    const technicalOrder = order === 'ASC' ? ASC : DESC;
 
-    const technicalOrder = order === 'ASC' ? -1 : 1;
     if(sortBy === 'createdDate') {
-        return {'_id': technicalOrder}
+        return { '_id': technicalOrder };
     }
 
     return {[sortBy]: technicalOrder}

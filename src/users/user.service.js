@@ -11,15 +11,16 @@ const getAllUsers = async (query = {}) => {
         } = query;
     const offset = (page - 1) * limit;
 
-    const builtFilterQuery = buildFilterQuery(filterParams);
-    const builtSortQuery = buildSortQuery(sortBy, order);
+    const filterQuery = buildFilterQuery(filterParams);
+    const sortQuery = buildSortQuery(sortBy, order);
 
-    const users = await User.find(builtFilterQuery)
+    const users = await User.find(filterQuery)
         .limit(limit)
         .skip(offset)
-        .sort(builtSortQuery);
+        .sort(sortQuery);
+
     const totalUser = await User.count();
-    const totalFilteredUsers = await User.count(builtFilterQuery);
+    const totalFilteredUsers = await User.count(filterQuery);
 
     return {
         data: users,
@@ -50,6 +51,7 @@ const updateUser = async (user, fieldsToChange) => {
     user.firstName = fieldsToChange.firstName?.length ? fieldsToChange.firstName : user.firstName;
     user.lastName = fieldsToChange.lastName?.length ? fieldsToChange.lastName : user.lastName;
     user.age = fieldsToChange.age ? fieldsToChange.age : user.age;
+    user.phoneNumber = fieldsToChange.phoneNumber ? fieldsToChange.phoneNumber : user.phoneNumber;
     user.password = fieldsToChange.password ? fieldsToChange.password : user.password;
 
     await User.findByIdAndUpdate(user._id, user);
