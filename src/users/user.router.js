@@ -1,5 +1,4 @@
 const express = require('express');
-
 const {
     getAllUsers,
     getUserById,
@@ -7,16 +6,17 @@ const {
     createUser,
     deleteUserById,
 } = require('./user.controller');
-
 const router = express.Router();
 const middlewares = require('../users/user.middleware');
+const { updateUserSchema, createUserSchema } = require("./user.schemas");
+const { validate } = require("../../validation/validation");
 
 router.get('/', getAllUsers);
-router.post('/', middlewares.isValidCreateData, middlewares.isEmailExist, createUser );
+router.post('/', validate(createUserSchema), middlewares.isEmailExist, createUser);
 
 router.use('/:userId', middlewares.isUserExist);
 router.get('/:userId', getUserById);
-router.put('/:userId', middlewares.isValidUpdateData, updateUserById);
+router.put('/:userId', validate(updateUserSchema), updateUserById);
 router.delete('/:userId', deleteUserById);
 
 module.exports = router;
