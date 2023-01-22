@@ -1,12 +1,12 @@
 const User = require('../../db/User');
-const { buildFilterQuery, buildSortQuery} = require("./user.query.builder");
+const { buildFilterQuery, buildSortQuery } = require("./user.query.builder");
 
-const getAllUsers = async (query = {}) => {
+const getAllUsers = async (query) => {
     const {
-        page = 1,
-        limit = 5,
-        sortBy = '_id',
-        order = 'ASC',
+        page,
+        limit,
+        sortBy,
+        order,
         ...filterParams
         } = query;
     const offset = (page - 1) * limit;
@@ -31,19 +31,27 @@ const getAllUsers = async (query = {}) => {
     }
 };
 
-const findUserById = (userId) => {
+const findUserById = async (userId) => {
     return User.findById(userId);
 };
 
-const findUserByEmail = (userEmail) => {
+const findUserByEmail = async (userEmail) => {
     return User.find({email: userEmail});
 }
 
-const createUser = (userData) => {
-    return User.create(userData);
+const findUserByParams = async (search) => {
+    return User.findOne(search).select('+password');
+}
+
+const createUser = async (userData) => {
+    // todo: fix bcrypt
+    // const hashedPassword = await hashPassword(userData.password);
+    const hashedPassword = userData.password;
+
+    return User.create({...userData, password: hashedPassword});
 };
 
-const deleteUserById = (userId) => {
+const deleteUserById = async (userId) => {
     return User.deleteOne(userId);
 };
 
@@ -52,7 +60,6 @@ const updateUser = async (user, fieldsToChange) => {
     user.lastName = fieldsToChange.lastName?.length ? fieldsToChange.lastName : user.lastName;
     user.age = fieldsToChange.age ? fieldsToChange.age : user.age;
     user.phoneNumber = fieldsToChange.phoneNumber ? fieldsToChange.phoneNumber : user.phoneNumber;
-    user.password = fieldsToChange.password ? fieldsToChange.password : user.password;
 
     await User.findByIdAndUpdate(user._id, user);
 
@@ -64,5 +71,6 @@ module.exports = {
     createUser,
     deleteUserById,
     updateUser,
-    findUserByEmail
+    findUserByEmail,
+    findUserByParams
 };

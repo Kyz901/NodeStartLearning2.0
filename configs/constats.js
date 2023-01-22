@@ -6,4 +6,5 @@ module.exports = {
     MIN_PASS_LENGTH: 8,
     ASC: -1,
     DESC: 1,
+    AUTHORIZATION: 'Authorization'
 };

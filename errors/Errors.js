@@ -4,7 +4,7 @@ const {
     FORBIDDEN,
     NOT_FOUND,
     UNAUTHORIZED,
-} = require("./error.codes");
+} = require("../configs/enums/error.codes.enum");
 
 class ApiError extends Error {
     constructor(message, status) {
