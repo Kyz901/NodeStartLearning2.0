@@ -1,15 +1,17 @@
-const { SERVER_ERROR } = require("./errors/error.codes");
-
 const express = require('express');
+const mongoose = require('mongoose');
+
 require('dotenv').config();
 const config = require('./configs/config');
-const mongoose = require('mongoose');
-const router = require('./src/router');
+const router = require('./api/router');
+const { SERVER_ERROR } = require("./configs/enums/error.codes.enum");
+
 const app = express();
 mongoose.set('debug', true);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
 app.use('/', router);
 app.use(mainErrorHandler);
 

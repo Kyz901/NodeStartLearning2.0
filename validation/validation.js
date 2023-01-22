@@ -10,6 +10,7 @@ const getErrorMessage = (req, schema) => {
                 ? validationResult.error.details.map(d => d.message).join('. ')
                 : validationResult.error.message + '. ';
         }
+        req[key] = validationResult.value;
     }
 
     return { message: errorMessage.replace(/"/g, "'")}

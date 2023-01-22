@@ -1,10 +1,11 @@
 const userService = require('./user.service');
+const { CREATED, OK } = require("../../configs/enums/success.codes.enum");
 
 const getAllUsers = async (req, res, next) => {
     try {
         const users = await userService.getAllUsers(req.query);
 
-        res.json(users);
+        res.status(OK).json(users);
     } catch (e) {
         next(e);
     }
@@ -12,7 +13,8 @@ const getAllUsers = async (req, res, next) => {
 
 const getUserById = (req, res, next) => {
     try {
-        res.json(req.user);
+
+        res.status(OK).json(req.internal.user);
     } catch (e) {
         next(e);
     }
@@ -22,7 +24,7 @@ const createUser = async (req, res, next) => {
     try {
         const newUser = await userService.createUser(req.body);
 
-        res.status(201).json(newUser);
+        res.status(CREATED).json(newUser);
     } catch (e) {
         next(e);
     }
@@ -30,9 +32,9 @@ const createUser = async (req, res, next) => {
 
 const deleteUserById = async (req, res, next) => {
     try {
-        await userService.deleteUserById(req.user._id);
+        await userService.deleteUserById(req.internal.user._id);
 
-        res.json("success");
+        res.status(OK).json("success");
     } catch (e) {
         next(e);
     }
@@ -40,9 +42,9 @@ const deleteUserById = async (req, res, next) => {
 
 const updateUserById = async (req, res, next) => {
     try {
-        const updatedUser = await userService.updateUser(req.user, req.body);
+        const updatedUser = await userService.updateUser(req.internal.user, req.body);
 
-        res.json(updatedUser);
+        res.status(OK).json(updatedUser);
     } catch (e) {
         next(e);
     }
