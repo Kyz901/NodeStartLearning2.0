@@ -1,6 +1,6 @@
-const {ASC, DESC} = require("../../configs/constats");
+const { ASC,DESC } = require("../../configs/constats");
 
-function buildFilterQuery(queryParams = {}) {
+function buildFilterQuery(queryParams) {
     const filterQuery = {};
     const ageFilter = {};
     const createdDateFilter = {};
